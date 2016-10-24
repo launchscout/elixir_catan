@@ -1,8 +1,9 @@
-defmodule CatanTest do
+defmodule StandardParsingTest do
   use ExUnit.Case
-  doctest Catan
+  doctest CatanMap
+
   setup do
-  map = """
+    map = """
                               >-----<
                              /~~~~~~~\
                             /~~~~~~~~~\
@@ -46,16 +47,20 @@ defmodule CatanTest do
                             \~~~~~~~~~/
                              \~~~~~~~/
                               >-----<
-  """
+    """
+
   {:ok, map: map}
   end
 
-  test "parse a map", %{map: map} do
-    assert Map.parse(map) == [%{}]
+  test "parses correct tile count on a standard map", %{map: map} do
+    assert CatanMap.parse(map) |> CatanMap.terrain_count == 19
   end
 
+  test "assigns correct terrain on a standard map", %{map: map} do
+    assert CatanMap.parse(map) |> CatanMap.terrain_at(0, 0) == :hills
+  end
 
-  test "print a map", %{map: map} do
-    assert Map.print(map) == map
+  test "assigned correct resource on a standard map", %{map: map} do
+    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :brick
   end
 end
