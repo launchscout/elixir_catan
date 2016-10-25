@@ -3,7 +3,7 @@ defmodule StandardParsingTest do
   doctest CatanMap
 
   setup do
-    map = ~S"""
+    map = ~S"
                               >-----<
                              /~~~~~~~\
                             /~~~~~~~~~\
@@ -47,7 +47,7 @@ defmodule StandardParsingTest do
                             \~~~~~~~~~/
                              \~~~~~~~/
                               >-----<
-    """
+    "
 
   {:ok, map: map}
   end
