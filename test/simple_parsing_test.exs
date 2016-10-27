@@ -13,7 +13,7 @@ defmodule SimpleParsingTest do
 <~~~~~~~~~~~>-----<~~~~~~~~~~~>
  \~~~~~~~~~/       \~~~~~~~~~/
   \~~~~~~~/    6    \~~~~~~~/
-   >-----<   brick   >-----<
+   >-----<  lumber   >-----<
   /~~~~~~~\         /~~~~~~~\
  /~~~~~~~~~\       /~~~~~~~~~\
 <~~~~~~~~~~~>-----<~~~~~~~~~~~>
@@ -33,10 +33,10 @@ defmodule SimpleParsingTest do
   end
 
   test "assigns correct terrain on a simple map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_at(0, 0) == :hills
+    assert CatanMap.parse(map) |> CatanMap.terrain_at(0, 0) == :forest
   end
 
   test "assigned correct resource on a simple map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :brick
+    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :lumber
   end
 end
