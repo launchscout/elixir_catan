@@ -56,11 +56,13 @@ defmodule StandardParsingTest do
     assert CatanMap.parse(map) |> CatanMap.terrain_count == 19
   end
 
-  test "assigns correct terrain on a standard map", %{map: map} do
+  test "assigns correct terrain at the origin on a standard map", %{map: map} do
     assert CatanMap.parse(map) |> CatanMap.terrain_at(0, 0) == :hills
+    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :brick
   end
 
-  test "assigned correct resource on a standard map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :brick
+  test "assigned correct resource on the q axis on a standard map", %{map: map} do
+    assert CatanMap.parse(map) |> CatanMap.terrain_at(-2, 0) == :fields
+    assert CatanMap.parse(map) |> CatanMap.resource_at(-2, 0) == :grain
   end
 end
