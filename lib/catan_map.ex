@@ -54,10 +54,6 @@ defmodule CatanMap do
         true -> q_acc
       end
     end)
-    # %{
-    #   0  => %{0 => HexParser.parse_hex(map_lines, origin)},
-    #   -2 => %{0 => HexParser.parse_hex(map_lines, hex_to_ascii(%{q: -2, r: 0}, origin))}
-    # }
   end
 
   # Gives the ascii coordinates of the center of the hex at the given point, relative to origin ascii coordinate
