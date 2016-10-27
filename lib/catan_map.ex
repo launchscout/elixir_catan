@@ -62,10 +62,10 @@ defmodule CatanMap do
     ascii_y = round(6 * (r + q / 2)) + y
 
     cond do
-      ascii_x < 0 -> nil
-      ascii_x >= width -> nil
-      ascii_y < 0 -> nil
-      ascii_y >= height -> nil
+      ascii_x - 6 < 0 -> nil
+      ascii_x + 6 >= width -> nil
+      ascii_y - 3 < 0 -> nil
+      ascii_y + 3 >= height -> nil
       true ->
         %{x: ascii_x, y: ascii_y}
     end

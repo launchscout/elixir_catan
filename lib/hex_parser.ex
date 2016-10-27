@@ -18,10 +18,20 @@ defmodule HexParser do
   }
 
   def parse_hex(map_lines, _ascii_position = %{x: x, y: y}) do
+    new_y = y + 1
+    water = String.at(Enum.at(map_lines, new_y), x)
     resource = String.at(Enum.at(map_lines, y), x)
-    %{
-      resource: @resource_map[resource],
-      terrain: @terrain_map[resource]
-    }
+    cond do
+      water == "~" ->
+        %{
+          resource: nil,
+          terrain: :water
+        }
+      true ->
+        %{
+          resource: @resource_map[resource],
+          terrain: @terrain_map[resource]
+        }
+    end
   end
 end
