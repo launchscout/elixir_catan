@@ -65,4 +65,9 @@ defmodule StandardParsingTest do
     assert CatanMap.parse(map) |> CatanMap.terrain_at(-2, 0) == :fields
     assert CatanMap.parse(map) |> CatanMap.resource_at(-2, 0) == :grain
   end
+
+  test "detects water hexes correctly", %{map: map} do
+    assert CatanMap.parse(map) |> CatanMap.terrain_at(-3, 3) == :water
+    assert CatanMap.parse(map) |> CatanMap.resource_at(-3, 3) == nil
+  end
 end
