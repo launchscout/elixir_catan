@@ -13,11 +13,18 @@ defmodule CatanMapParser do
   end
 
   defp origin_and_boundaries(map_lines) do
-    line_pos = round((length(map_lines) - 1) / 2)
-    max_row_length = Enum.reduce(map_lines, 0, fn(row, acc) -> max(String.length(row), acc) end)
-    col_pos = round((max_row_length - 1) / 2)
-    %AsciiOrigin{x: col_pos, y: line_pos, width: max_row_length, height: length(map_lines)}
+    %AsciiOrigin{
+      x: origin_x(map_lines),
+      y: origin_y(map_lines),
+      width: ascii_width(map_lines),
+      height: ascii_height(map_lines)
+    }
   end
+
+  defp origin_x(map_lines), do: round((ascii_width(map_lines) - 1) / 2)
+  defp origin_y(map_lines), do: round((ascii_height(map_lines) - 1) / 2)
+  defp ascii_width(map_lines), do: Enum.reduce(map_lines, 0, fn(row, acc) -> max(String.length(row), acc) end)
+  defp ascii_height(map_lines), do: length(map_lines)
 
   defp map_tiles(map_lines) do
     ascii_origin = origin_and_boundaries(map_lines)
