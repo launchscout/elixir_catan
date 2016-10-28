@@ -5,19 +5,11 @@ defmodule CatanMapParser do
     |> Enum.slice(0..-2)
 
     %{
-      count: count_tiles(map_lines),
       tiles: map_tiles(map_lines)
     }
   end
 
-  defp count_tiles(map_lines) do
-    tiles_high = (length(map_lines) - 1) / 6 #7
-    rings_around_center = round((tiles_high - 3) / 2) #3
-    _count_tiles(rings_around_center, 0)
   end
-
-  defp _count_tiles(0, acc), do: acc + 1
-  defp _count_tiles(rem, acc), do: _count_tiles(rem - 1, acc + (rem * 6))
 
   defp origin_and_boundaries(map_lines) do
     line_pos = round((length(map_lines) - 1) / 2)

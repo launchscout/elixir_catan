@@ -1,20 +1,12 @@
 defmodule HexParser do
   @resource_map %{
-    "a" => :grain,
-    "b" => :lumber,
-    "i" => :brick,
-    "o" => :wool,
-    "r" => :ore,
-    "s" => nil
+    "a" => :grain,  "b" => :lumber,  "e" => nil,
+    "i" => :brick,  "o" => :wool,    "r" => :ore
   }
 
   @terrain_map %{
-    "a" => :fields,
-    "b" => :forest,
-    "i" => :hills,
-    "o" => :pasture,
-    "r" => :mountains,
-    "s" => :desert
+    "a" => :fields, "b" => :forest,  "e" => :desert,
+    "i" => :hills,  "o" => :pasture, "r" => :mountains
   }
 
   def parse_hex(map_lines, location = %AsciiLocation{}) do
