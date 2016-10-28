@@ -53,21 +53,25 @@ defmodule StandardParsingTest do
   end
 
   test "parses correct tile count on a standard map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_count == 19
+    assert CatanMapParser.parse(map) |> CatanMap.terrain_count == 19
   end
 
   test "assigns correct terrain at the origin on a standard map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_at(0, 0) == :hills
-    assert CatanMap.parse(map) |> CatanMap.resource_at(0, 0) == :brick
+    assert CatanMapParser.parse(map) |> CatanMap.terrain_at(0, 0) == :hills
+    assert CatanMapParser.parse(map) |> CatanMap.resource_at(0, 0) == :brick
+  end
+
+  test "parses correct chit value on origin hex", %{map: map} do
+    assert CatanMapParser.parse(map) |> CatanMap.chit_at(0, 0) == 6
   end
 
   test "assigned correct resource on the q axis on a standard map", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_at(-2, 0) == :fields
-    assert CatanMap.parse(map) |> CatanMap.resource_at(-2, 0) == :grain
+    assert CatanMapParser.parse(map) |> CatanMap.terrain_at(-2, 0) == :fields
+    assert CatanMapParser.parse(map) |> CatanMap.resource_at(-2, 0) == :grain
   end
 
   test "detects water hexes correctly", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_at(3, 0) == :water
-    assert CatanMap.parse(map) |> CatanMap.resource_at(3, 0) == nil
+    assert CatanMapParser.parse(map) |> CatanMap.terrain_at(3, 0) == :water
+    assert CatanMapParser.parse(map) |> CatanMap.resource_at(3, 0) == nil
   end
 end
