@@ -50,17 +50,14 @@ defmodule CatanMapParser do
   end
 
   # Gives the ascii coordinates of the center of the hex at the given point, relative to origin ascii coordinate
-  defp hex_to_ascii(%Location{q: q, r: r}, %AsciiOrigin{x: x, y: y, width: width, height: height}) do
-    ascii_x = round(9 * q) + x
-    ascii_y = round(6 * (r + q / 2)) + y
+  defp hex_to_ascii(location = %Location{}, origin = %AsciiOrigin{}) do
+    x = round(9 * location.q) + origin.x
+    y = round(6 * (location.r + location.q / 2)) + origin.y
 
     cond do
-      ascii_x - 6 < 0 -> nil
-      ascii_x + 6 >= width -> nil
-      ascii_y - 3 < 0 -> nil
-      ascii_y + 3 >= height -> nil
-      true ->
-        %AsciiLocation{x: ascii_x, y: ascii_y}
+      x - 6 < 0 || x + 6 >= origin.width -> nil
+      y - 3 < 0 || y + 3 >= origin.height -> nil
+      true -> %AsciiLocation{x: x, y: y}
     end
   end
 end
