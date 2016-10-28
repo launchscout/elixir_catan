@@ -31,11 +31,11 @@ defmodule HexParser do
     end
   end
 
-  def contains_robber?(map_lines, location = %AsciiLocation{}) do
+  defp contains_robber?(map_lines, location = %AsciiLocation{}) do
     Enum.at(map_lines, location.y + 1) |> String.at(location.x) == "B"
   end
 
-  def parse_chit(map_lines, location = %AsciiLocation{}) do
+  defp parse_chit(map_lines, location = %AsciiLocation{}) do
     Enum.at(map_lines, location.y - 1)
     |> String.slice(location.x - 1, 2)
     |> String.trim
@@ -43,6 +43,6 @@ defmodule HexParser do
     |> chit_value
   end
 
-  def chit_value({value, _}), do: value
-  def chit_value(:error), do: nil
+  defp chit_value({value, _}), do: value
+  defp chit_value(:error), do: nil
 end
