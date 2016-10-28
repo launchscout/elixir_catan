@@ -23,7 +23,7 @@ defmodule StandardParsingTest do
   /~~~~~~~\         /       \         /       \         /~~~~~~~\
  /~~~2:1~~~\       /    8    \       /         \       /~~~2:1~~~\
 <~~~brick~~*>-----<   wool    >-----<  desert   >-----<*~~~ore~~~~>
- \~~~~~~~~~/       \         /       \  ROBBER /       \~~~~~~~~~/
+ \~~~~~~~~~/       \         /       \ ROBBER  /       \~~~~~~~~~/
   \~~~~~~*/   10    \       /    6    \       /   10    \*~~~~~~/
    >-----<  lumber   >-----<   brick   >-----<   wool    >-----<
   /~~~~~~~\         /       \         /       \         /~~~~~~~\
@@ -68,6 +68,11 @@ defmodule StandardParsingTest do
   test "assigned correct resource on the q axis on a standard map", %{map: map} do
     assert CatanMapParser.parse(map) |> CatanMap.terrain_at(-2, 0) == :fields
     assert CatanMapParser.parse(map) |> CatanMap.resource_at(-2, 0) == :grain
+  end
+
+  test "parses robber correctly", %{map: map} do
+    _robber_location = CatanMapParser.parse(map) |> CatanMap.robber_location
+    assert _robber_location = %{q: 1, r: -1}
   end
 
   test "detects water hexes correctly", %{map: map} do
