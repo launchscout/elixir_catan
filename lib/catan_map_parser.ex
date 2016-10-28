@@ -11,15 +11,6 @@ defmodule CatanMapParser do
     }
   end
 
-  def terrain_count(%{count: count}), do: count
-  def terrain_count(_), do: nil
-
-  def resource_at(%{tiles: tiles}, q, r), do: tiles[q][r][:resource]
-  def resource_at(_, _, _), do: nil
-
-  def terrain_at(%{tiles: tiles}, q, r), do: tiles[q][r][:terrain]
-  def terrain_at(_, _, _), do: nil
-
   defp count_tiles(map_lines) do
     tiles_high = (length(map_lines) - 1) / 6 #7
     rings_around_center = round((tiles_high - 3) / 2) #3
@@ -32,7 +23,6 @@ defmodule CatanMapParser do
   defp origin_and_boundaries(map_lines) do
     line_pos = round((length(map_lines) - 1) / 2)
     max_row_length = Enum.reduce(map_lines, 0, fn(row, acc) -> max(String.length(row), acc) end)
-    origin_row = Enum.at(map_lines, line_pos)
     col_pos = round((max_row_length - 1) / 2)
     %{x: col_pos, y: line_pos, width: max_row_length, height: length(map_lines)}
   end

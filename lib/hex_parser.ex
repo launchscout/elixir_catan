@@ -25,15 +25,21 @@ defmodule HexParser do
         %{
           resource: nil,
           terrain: :water,
-          chit: nil
+          chit: nil,
+          robber: false
         }
       true ->
         %{
           resource: @resource_map[resource],
           terrain: @terrain_map[resource],
-          chit: parse_chit(map_lines, ascii_position)
+          chit: parse_chit(map_lines, ascii_position),
+          robber: contains_robber?(map_lines, ascii_position)
         }
     end
+  end
+
+  def contains_robber?(map_lines, _ascii_position = %{x: x, y: y}) do
+    Enum.at(map_lines, y + 1) |> String.at(x) == "B"
   end
 
   def parse_chit(map_lines, _ascii_position = %{x: x, y: y}) do
