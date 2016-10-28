@@ -31,9 +31,10 @@ defmodule CatanMap do
 
   defp origin_and_boundaries(map_lines) do
     line_pos = round((length(map_lines) - 1) / 2)
+    max_row_length = Enum.reduce(map_lines, 0, fn(row, acc) -> max(String.length(row), acc) end)
     origin_row = Enum.at(map_lines, line_pos)
-    col_pos = round((String.length(origin_row) - 1) / 2) + 1
-    %{x: col_pos, y: line_pos, width: String.length(origin_row), height: length(map_lines)}
+    col_pos = round((max_row_length - 1) / 2)
+    %{x: col_pos, y: line_pos, width: max_row_length, height: length(map_lines)}
   end
 
   defp map_tiles(map_lines) do
