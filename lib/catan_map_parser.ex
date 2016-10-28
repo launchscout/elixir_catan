@@ -1,14 +1,15 @@
 defmodule CatanMapParser do
   def parse(raw_map) do
-    map_lines = raw_map
-    |> String.split("\n")
-    |> Enum.slice(0..-2)
-
+    map_lines = map_lines(raw_map)
     %{
       tiles: map_tiles(map_lines)
     }
   end
 
+  defp map_lines(raw_map) do
+    raw_map
+    |> String.split("\n")
+    |> Enum.slice(0..-2)
   end
 
   defp origin_and_boundaries(map_lines) do
@@ -20,24 +21,25 @@ defmodule CatanMapParser do
 
   defp map_tiles(map_lines) do
     ascii_origin = origin_and_boundaries(map_lines)
-    range = Enum.to_list(-100..100)
 
-    Enum.reduce(range, %{}, fn(q, acc) ->
-      Enum.reduce(range, acc, fn(r, acc) ->
-        location = %Location{q: q, r: r}
-        case map_tile(map_lines, location, ascii_origin) do
-          hex = %{} -> Map.put_new(acc, location, hex)
-          nil -> acc
-        end
+    range = Enum.to_list(-100..100)
+    Enum.reduce(range, %{}, fn(q, tiles) ->
+      Enum.reduce(range, tiles, fn(r, tiles) ->
+        %Location{q: q, r: r}
+        |> map_tile(ascii_origin, map_lines)
+        |> add_tile(tiles)
       end)
     end)
   end
 
-  def map_tile(map_lines, location = %Location{}, origin = %AsciiOrigin{}) do
+  defp add_tile({_, nil}, tiles), do: tiles
+  defp add_tile({location, tile}, tiles), do: Map.put_new(tiles, location, tile)
+
+  def map_tile(location = %Location{}, origin = %AsciiOrigin{}, map_lines) do
     case hex_to_ascii(location, origin) do
       ascii_location = %AsciiLocation{} ->
-        HexParser.parse_hex(map_lines, ascii_location)
-      nil -> nil
+        {location, HexParser.parse_hex(map_lines, ascii_location)}
+      nil -> {location, nil}
     end
   end
 

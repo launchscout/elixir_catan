@@ -35,13 +35,13 @@ defmodule HexParser do
   end
 
   def parse_chit(map_lines, location = %AsciiLocation{}) do
-    parsed_chit = Enum.at(map_lines, location.y - 1)
-                  |> String.slice(location.x - 1, 2)
-                  |> String.trim
-                  |> Integer.parse
-    case parsed_chit do
-      {x, _} -> x
-      :error -> nil
-    end
+    Enum.at(map_lines, location.y - 1)
+    |> String.slice(location.x - 1, 2)
+    |> String.trim
+    |> Integer.parse
+    |> chit_value
   end
+
+  def chit_value({value, _}), do: value
+  def chit_value(:error), do: nil
 end
