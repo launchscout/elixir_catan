@@ -67,7 +67,7 @@ defmodule StandardParsingTest do
   end
 
   test "detects water hexes correctly", %{map: map} do
-    assert CatanMap.parse(map) |> CatanMap.terrain_at(-3, 3) == :water
-    assert CatanMap.parse(map) |> CatanMap.resource_at(-3, 3) == nil
+    assert CatanMap.parse(map) |> CatanMap.terrain_at(3, 0) == :water
+    assert CatanMap.parse(map) |> CatanMap.resource_at(3, 0) == nil
   end
 end
