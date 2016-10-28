@@ -9,7 +9,8 @@ defmodule HexParser do
     "i" => :hills,  "o" => :pasture, "r" => :mountains
   }
 
-  def parse_hex(map_lines, location = %AsciiLocation{}) do
+  def parse_hex(nil, _), do: nil
+  def parse_hex(location = %AsciiLocation{}, map_lines) do
     water = String.at(Enum.at(map_lines, location.y + 1), location.x)
     resource = String.at(Enum.at(map_lines, location.y), location.x)
     cond do

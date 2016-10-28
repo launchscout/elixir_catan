@@ -25,23 +25,17 @@ defmodule CatanMapParser do
     range = Enum.to_list(-100..100)
     Enum.reduce(range, %{}, fn(q, tiles) ->
       Enum.reduce(range, tiles, fn(r, tiles) ->
-        %Location{q: q, r: r}
-        |> map_tile(ascii_origin, map_lines)
-        |> add_tile(tiles)
+        location = %Location{q: q, r: r}
+        location
+        |> hex_to_ascii(ascii_origin)
+        |> HexParser.parse_hex(map_lines)
+        |> add_tile(location, tiles)
       end)
     end)
   end
 
-  defp add_tile({_, nil}, tiles), do: tiles
-  defp add_tile({location, tile}, tiles), do: Map.put_new(tiles, location, tile)
-
-  def map_tile(location = %Location{}, origin = %AsciiOrigin{}, map_lines) do
-    case hex_to_ascii(location, origin) do
-      ascii_location = %AsciiLocation{} ->
-        {location, HexParser.parse_hex(map_lines, ascii_location)}
-      nil -> {location, nil}
-    end
-  end
+  defp add_tile(nil, _, tiles), do: tiles
+  defp add_tile(tile, location, tiles), do: Map.put_new(tiles, location, tile)
 
   # Gives the ascii coordinates of the center of the hex at the given point, relative to origin ascii coordinate
   defp hex_to_ascii(location = %Location{}, origin = %AsciiOrigin{}) do
