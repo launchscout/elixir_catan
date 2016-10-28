@@ -17,7 +17,7 @@ defmodule HexParser do
     "s" => :desert
   }
 
-  def parse_hex(map_lines, ascii_position = %{x: x, y: y}) do
+  def parse_hex(map_lines, ascii_location = %AsciiLocation{x: x, y: y}) do
     water = String.at(Enum.at(map_lines, y + 1), x)
     resource = String.at(Enum.at(map_lines, y), x)
     cond do
@@ -32,17 +32,17 @@ defmodule HexParser do
         %{
           resource: @resource_map[resource],
           terrain: @terrain_map[resource],
-          chit: parse_chit(map_lines, ascii_position),
-          robber: contains_robber?(map_lines, ascii_position)
+          chit: parse_chit(map_lines, ascii_location),
+          robber: contains_robber?(map_lines, ascii_location)
         }
     end
   end
 
-  def contains_robber?(map_lines, _ascii_position = %{x: x, y: y}) do
+  def contains_robber?(map_lines, %AsciiLocation{x: x, y: y}) do
     Enum.at(map_lines, y + 1) |> String.at(x) == "B"
   end
 
-  def parse_chit(map_lines, _ascii_position = %{x: x, y: y}) do
+  def parse_chit(map_lines, %AsciiLocation{x: x, y: y}) do
     parsed_chit = Enum.at(map_lines, y - 1)
                   |> String.slice(x - 1, 2)
                   |> String.trim
