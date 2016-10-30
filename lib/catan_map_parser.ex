@@ -1,9 +1,9 @@
 defmodule CatanMapParser do
   def parse(raw_map) do
     map_lines = map_lines(raw_map)
-    %{
-      tiles: map_tiles(map_lines)
-    }
+
+    map_tiles(map_lines)
+    |> map_edges(map_lines)
   end
 
   defp map_lines(raw_map) do
@@ -30,7 +30,7 @@ defmodule CatanMapParser do
     ascii_origin = origin_and_boundaries(map_lines)
 
     range = Enum.to_list(-100..100)
-    Enum.reduce(range, %{}, fn(q, tiles) ->
+    tiles = Enum.reduce(range, %{}, fn(q, tiles) ->
       Enum.reduce(range, tiles, fn(r, tiles) ->
         location = %Location{q: q, r: r}
         location
@@ -38,6 +38,23 @@ defmodule CatanMapParser do
         |> HexParser.parse_hex(map_lines)
         |> add_tile(location, tiles)
       end)
+    end)
+    %{tiles: tiles}
+  end
+
+  defp map_edges(board, map_lines) do
+    edges = Enum.reduce(board.tiles, %{}, fn({location, _}, edges) ->
+      hex_to_ascii(location, origin_and_boundaries(map_lines))
+      |> HexParser.parse_harbors(map_lines)
+      |> merge_harbors(location, edges)
+    end)
+    Map.put_new(board, :edges, edges)
+  end
+
+  defp merge_harbors(hex_harbors, location, board_edges) do
+    Enum.reduce(hex_harbors, board_edges, fn({direction, harbor_resource}, board_edges) ->
+      normalized_location = Hexagon.edge(location, direction)
+      Map.put(board_edges, normalized_location, %{harbor_resource: harbor_resource})
     end)
   end
 
