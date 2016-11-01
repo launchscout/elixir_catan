@@ -20,6 +20,16 @@ defmodule HexParserTest do
     }
   end
 
+  describe "HexParser.parse_intersections" do
+    test "finds cities", %{map_lines: map_lines, location: location} do
+      assert HexParser.parse_intersections(location, map_lines).left == %{type: :city, player: :blue}
+    end
+
+    test "finds settlements", %{map_lines: map_lines, location: location} do
+      assert HexParser.parse_intersections(location, map_lines).right == %{type: :settlement, player: :red}
+    end
+  end
+
   describe "HexParser.parse_roads/3" do
     test "finds :se roads", %{map_lines: map_lines, location: location} do
       assert HexParser.parse_roads(location, map_lines).se == :red

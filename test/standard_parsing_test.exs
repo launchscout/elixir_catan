@@ -28,10 +28,10 @@ defmodule StandardParsingTest do
    >-----<  lumber   >-----<   brick   >-----<   wool    >-----<
   /~~~~~~~\         /       \         /       \         /~~~~~~~\
  /~~~~~~~~~\       /   12    \       /    2    \       /~~~~~~~~~\
-<~~~~~~~~~~~>-----<   grain   >-----<    ore    >-----<~~~~~~~~~~~>
+<~~~~~~~~~~~>-----R   grain   >-----<    ore    >-----<~~~~~~~~~~~>
  \~~~~~~~~~/       \         /       \         /       \~~~~~~~~~/
   \~~~~~~~/    6    \       /    4    \       /   12    \~~~~~~~/
-   >-----<   grain   >-----<   wool    >-----<   brick   >-----<
+   >-----<   grain   >-----<   wool   WW-----<   brick   >-----<
   /~~~~~~3\         /       \         /       \         r3~~~~~~\
  /~~~~~~~~3\       /   11    \       /    5    \       r3~~~~~~~~\
 <~~~~~~~~~~~>-----<  lumber   >-----<   grain   >-----<~~~~~~~~~~~>
@@ -88,5 +88,17 @@ defmodule StandardParsingTest do
   test "detects player roads", %{map: map} do
     edge = CatanMapParser.parse(map) |> CatanMap.edge_at(2, 0, :se)
     assert edge[:player] == :red
+  end
+
+  test "detects settlements", %{map: map} do
+    vertex =  CatanMapParser.parse(map) |> CatanMap.vertex_at(-1, 1, :left)
+    assert vertex.player == :red
+    assert vertex.type == :settlement
+  end
+
+  test "detects cities", %{map: map} do
+    vertex =  CatanMapParser.parse(map) |> CatanMap.vertex_at(0, 1, :right)
+    assert vertex.player == :white
+    assert vertex.type == :city
   end
 end
