@@ -32,8 +32,8 @@ defmodule StandardParsingTest do
  \~~~~~~~~~/       \         /       \         /       \~~~~~~~~~/
   \~~~~~~~/    6    \       /    4    \       /   12    \~~~~~~~/
    >-----<   grain   >-----<   wool    >-----<   brick   >-----<
-  /~~~~~~3\         /       \         /       \         /3~~~~~~\
- /~~~~~~~~3\       /   11    \       /    5    \       /3~~~~~~~~\
+  /~~~~~~3\         /       \         /       \         r3~~~~~~\
+ /~~~~~~~~3\       /   11    \       /    5    \       r3~~~~~~~~\
 <~~~~~~~~~~~>-----<  lumber   >-----<   grain   >-----<~~~~~~~~~~~>
  \~~~~~~~~~/~~~~~~~\         /       \         /~~~~~~~\~~~~~~~~~/
   \~~~~~~~/~~~~~~~~~\       /    5    \       /~~~~~~~~~\~~~~~~~/
@@ -81,7 +81,12 @@ defmodule StandardParsingTest do
   end
 
   test "detects resource harbors and assigns them to the correct edge location", %{map: map} do
-    edge = CatanMapParser.parse(map) |> CatanMap.edge_at(-2, 2, :sw)
+    edge = CatanMapParser.parse(map) |> CatanMap.edge_at(2, 0, :se)
     assert edge[:harbor_resource] == :any
+  end
+
+  test "detects player roads", %{map: map} do
+    edge = CatanMapParser.parse(map) |> CatanMap.edge_at(2, 0, :se)
+    assert edge[:player] == :red
   end
 end
