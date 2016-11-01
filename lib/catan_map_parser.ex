@@ -48,11 +48,11 @@ defmodule CatanMapParser do
       hex_ascii_center = hex_to_ascii(location, origin_and_boundaries(map_lines))
 
       edges = hex_ascii_center
-      |> HexParser.parse_harbors(map_lines)
+      |> EdgeParser.parse_harbors(map_lines)
       |> merge_harbors(location, edges)
 
       hex_ascii_center
-      |> HexParser.parse_roads(map_lines)
+      |> EdgeParser.parse_roads(map_lines)
       |> merge_roads(location, edges)
     end)
     Map.put_new(board, :edges, edges)
@@ -61,7 +61,7 @@ defmodule CatanMapParser do
   defp map_vertices(board, map_lines) do
     vertices = Enum.reduce(board.tiles, %{}, fn({location, _}, vertices) ->
       hex_to_ascii(location, origin_and_boundaries(map_lines))
-      |> HexParser.parse_intersections(map_lines)
+      |> VertexParser.parse_vertices(map_lines)
       |> merge_vertices(location, vertices)
     end)
     Map.put_new(board, :vertices, vertices)

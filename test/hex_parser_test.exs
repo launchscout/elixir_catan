@@ -1,13 +1,13 @@
-defmodule HexParserTest do
+defmodule EdgeParserTest do
   use ExUnit.Case
   doctest CatanMap
 
   setup do
     map_lines = ~S"
         b~~g~~l
-       b~~12~~~l
-     BB~lumber~~~R
-      w3ROBBER~wr
+       b~~~~~~~l
+     <~~~~~~~~~~~>
+      w3~~~~~~~wr
        w3~~o~~wr
          -bbb-
        "
@@ -20,53 +20,43 @@ defmodule HexParserTest do
     }
   end
 
-  describe "HexParser.parse_intersections" do
-    test "finds cities", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_intersections(location, map_lines).left == %{type: :city, player: :blue}
-    end
-
-    test "finds settlements", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_intersections(location, map_lines).right == %{type: :settlement, player: :red}
-    end
-  end
-
-  describe "HexParser.parse_roads/3" do
+  describe "EdgeParser.parse_roads/3" do
     test "finds :se roads", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_roads(location, map_lines).se == :red
+      assert EdgeParser.parse_roads(location, map_lines).se == :red
     end
 
     test "finds :s roads", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_roads(location, map_lines).s == :blue
+      assert EdgeParser.parse_roads(location, map_lines).s == :blue
     end
 
     test "finds :sw roads", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_roads(location, map_lines).sw == :white
+      assert EdgeParser.parse_roads(location, map_lines).sw == :white
     end
   end
 
-  describe "HexParser.parse_harbors/3" do
+  describe "EdgeParser.parse_harbors/3" do
     test "finds a :nw harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).nw == :brick
+      assert EdgeParser.parse_harbors(location, map_lines).nw == :brick
     end
 
     test "finds a :n harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).n == :grain
+      assert EdgeParser.parse_harbors(location, map_lines).n == :grain
     end
 
     test "finds a :ne harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).ne == :lumber
+      assert EdgeParser.parse_harbors(location, map_lines).ne == :lumber
     end
 
     test "finds a :se harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).se == :wool
+      assert EdgeParser.parse_harbors(location, map_lines).se == :wool
     end
 
     test "finds a :s harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).s == :ore
+      assert EdgeParser.parse_harbors(location, map_lines).s == :ore
     end
 
     test "finds a :sw harbor", %{map_lines: map_lines, location: location} do
-      assert HexParser.parse_harbors(location, map_lines).sw == :any
+      assert EdgeParser.parse_harbors(location, map_lines).sw == :any
     end
   end
 end
