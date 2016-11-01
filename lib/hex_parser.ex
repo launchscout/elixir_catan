@@ -82,6 +82,39 @@ defmodule HexParser do
     Map.put_new(edges, direction, player)
   end
 
+  @intersection_offsets %{
+    left: -6, right: 5
+  }
+  def parse_intersections(l = %AsciiLocation{}, map_lines) do
+    line = Enum.at(map_lines, l.y)
+
+    Enum.reduce(@intersection_offsets, %{}, fn({direction, offset}, intersections) ->
+      val = String.slice(line, l.x + offset, 2)
+      |> parse_intersection
+      |> add_intersection(direction, intersections)
+    end)
+  end
+
+  defp parse_intersection("<" <> _), do: nil
+  defp parse_intersection(<<_::utf8>> <> ">"), do: nil
+  defp parse_intersection("  "), do: nil
+  defp parse_intersection(""), do: nil
+  defp parse_intersection(value) do
+    value = hd(Regex.run(~r{\w+}, value))
+    case String.length(value) do
+      1 -> parse_intersection(:settlement, value)
+      2 -> parse_intersection(:city, String.at(value, 0))
+    end
+  end
+
+  defp parse_intersection(type, "B"), do: %{type: type, player: :blue}
+  defp parse_intersection(type, "O"), do: %{type: type, player: :orange}
+  defp parse_intersection(type, "R"), do: %{type: type, player: :red}
+  defp parse_intersection(type, "W"), do: %{type: type, player: :white}
+
+  defp add_intersection(nil, _, intersections), do: intersections
+  defp add_intersection(intersection, direction, intersections), do: Map.put(intersections, direction, intersection)
+
   defp contains_robber?(map_lines, location = %AsciiLocation{}) do
     Enum.at(map_lines, location.y + 1) |> String.at(location.x) == "B"
   end

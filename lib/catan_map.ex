@@ -11,6 +11,9 @@ defmodule CatanMap do
   def edge_at(board, q, r, d), do: edge_at(board, %Location{q: q, r: r, d: d})
   def edge_at(%{edges: edges}, location), do: edges[location]
 
+  def vertex_at(board, q, r, d), do: vertex_at(board, %Location{q: q, r: r, d: d})
+  def vertex_at(%{vertices: vertices}, location), do: vertices[location]
+
   def terrain_count(%{tiles: tiles}) do
     Enum.count(tiles, fn({_, tile}) ->
       tile.terrain != nil && tile.terrain != :water
