@@ -11,9 +11,7 @@ defmodule CatanMapRenderer do
 
     map_lines = Enum.reduce(board.vertices, map_lines, fn({location, vertex}, map_lines) ->
       ascii_location = hex_to_ascii(location, ascii_origin)
-      map_line = Enum.at(map_lines, ascii_location.y)
-      map_line = VertexRenderer.render_vertex(vertex, location.d, ascii_location, map_line)
-      List.replace_at(map_lines, ascii_location.y, map_line)
+      VertexRenderer.render_vertex(vertex, location.d, ascii_location, map_lines)
     end)
 
     IO.puts Enum.join(map_lines, "\n")
