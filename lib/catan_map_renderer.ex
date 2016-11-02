@@ -4,12 +4,20 @@ defmodule CatanMapRenderer do
     y_center = round((length(map_lines) - 1) / 2)
     ascii_origin = %AsciiOrigin{x: 33, y: y_center, width: 70, height: length(map_lines)}
 
-    map = Enum.reduce(board.tiles, map_lines, fn({location, tile}, map_lines) ->
+    map_lines = Enum.reduce(board.tiles, map_lines, fn({location, tile}, map_lines) ->
       ascii_location = hex_to_ascii(location, ascii_origin)
       HexRenderer.render_tile(tile, ascii_location, map_lines)
     end)
-    IO.puts Enum.join(map, "\n")
-    map |> Enum.join("\n")
+
+    map_lines = Enum.reduce(board.vertices, map_lines, fn({location, vertex}, map_lines) ->
+      ascii_location = hex_to_ascii(location, ascii_origin)
+      map_line = Enum.at(map_lines, ascii_location.y)
+      map_line = VertexRenderer.render_vertex(vertex, location.d, ascii_location, map_line)
+      List.replace_at(map_lines, ascii_location.y, map_line)
+    end)
+
+    IO.puts Enum.join(map_lines, "\n")
+    map_lines |> Enum.join("\n")
   end
 
   defp empty_map_lines(board) do

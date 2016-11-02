@@ -20,7 +20,7 @@ defmodule HexRendererTest do
     }
   end
 
-  describe "EdgeParser.render_tile/3" do
+  describe "HexRenderer.render_tile/3" do
     test "renders a normal tile" do
       location = %AsciiLocation{x: 12, y: 4}
       tile = %{chit: nil, resource: :brick, robber: false, terrain: :hills}
@@ -35,7 +35,7 @@ defmodule HexRendererTest do
          >-----<"
 
       map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
-      assert HexRenderer.render_tile(location, tile, map_lines) |> Enum.join("\n") == expected_map
+      assert HexRenderer.render_tile(tile, location, map_lines) |> Enum.join("\n") == expected_map
     end
 
     test "renders a water tile" do
@@ -52,7 +52,7 @@ defmodule HexRendererTest do
          >-----<"
 
       map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
-      assert HexRenderer.render_tile(location, tile, map_lines) |> Enum.join("\n") == expected_map
+      assert HexRenderer.render_tile(tile, location, map_lines) |> Enum.join("\n") == expected_map
     end
   end
 end
