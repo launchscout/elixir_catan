@@ -4,18 +4,29 @@ defmodule HexRenderer do
     map_lines = render_template(tile, l, map_lines)
 
     resource_line = render_resource(tile, l.x, Enum.at(map_lines, l.y))
-    List.replace_at(map_lines, l.y, resource_line)
+    map_lines = List.replace_at(map_lines, l.y, resource_line)
+
+    chit_line = render_chit(tile, l.x, Enum.at(map_lines, l.y - 1))
+    map_lines = List.replace_at(map_lines, l.y - 1, chit_line)
+
+    robber_line = render_robber(tile, l.x, Enum.at(map_lines, l.y + 1))
+    List.replace_at(map_lines, l.y + 1, robber_line)
   end
 
   defp render_resource(%{resource: nil, terrain: nil}, _, map_line), do: map_line
   defp render_resource(%{resource: nil, terrain: :water}, x, map_line), do: map_line
-  defp render_resource(%{resource: nil, terrain: title}, x, map_line), do: render_title(title, x, map_line)
-  defp render_resource(%{resource: title}, x, map_line), do:  render_title(title, x, map_line)
+  defp render_resource(%{resource: nil, terrain: title}, x, map_line), do: Atom.to_string(title) |> render_centered(x, map_line)
+  defp render_resource(%{resource: title}, x, map_line), do: Atom.to_string(title) |> render_centered(x, map_line)
 
-  defp render_title(title, x, map_line) do
-    resource = Atom.to_string(title)
-    start_position = x - trunc(String.length(resource) / 2)
-    replace_string(map_line, resource, start_position)
+  defp render_chit(%{chit: nil}, x, map_line), do: map_line
+  defp render_chit(%{chit: chit}, x, map_line), do: Integer.to_string(chit) |> render_centered(x, map_line)
+
+  defp render_robber(%{robber: false}, x, map_line), do: map_line
+  defp render_robber(%{robber: true}, x, map_line), do: render_centered("ROBBER", x, map_line)
+
+  defp render_centered(title, x, map_line) do
+    start_position = x - trunc(String.length(title) / 2)
+    replace_string(map_line, title, start_position)
   end
 
   @water_template [~S{>-----<},
