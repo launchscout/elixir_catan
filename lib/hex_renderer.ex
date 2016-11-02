@@ -7,9 +7,13 @@ defmodule HexRenderer do
     List.replace_at(map_lines, l.y, resource_line)
   end
 
-  defp render_resource(%{resource: nil}, _, map_line), do: map_line
-  defp render_resource(%{resource: resource_atom}, x, map_line) do
-    resource = Atom.to_string(resource_atom)
+  defp render_resource(%{resource: nil, terrain: nil}, _, map_line), do: map_line
+  defp render_resource(%{resource: nil, terrain: :water}, x, map_line), do: map_line
+  defp render_resource(%{resource: nil, terrain: title}, x, map_line), do: render_title(title, x, map_line)
+  defp render_resource(%{resource: title}, x, map_line), do:  render_title(title, x, map_line)
+
+  defp render_title(title, x, map_line) do
+    resource = Atom.to_string(title)
     start_position = x - trunc(String.length(resource) / 2)
     replace_string(map_line, resource, start_position)
   end
