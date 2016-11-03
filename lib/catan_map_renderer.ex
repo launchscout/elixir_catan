@@ -4,13 +4,11 @@ defmodule CatanMapRenderer do
     y_center = round((length(map_lines) - 1) / 2)
     ascii_origin = %AsciiOrigin{x: 33, y: y_center, width: 70, height: length(map_lines)}
 
-    map_lines = map_lines
+    map_lines
     |> render_tiles(board, ascii_origin)
     |> render_vertices(board, ascii_origin)
     |> render_edges(board, ascii_origin)
-
-    IO.puts Enum.join(map_lines, "\n")
-    map_lines |> Enum.join("\n")
+    |> Enum.join("\n")
   end
 
   defp render_tiles(map_lines, board, ascii_origin) do
@@ -50,12 +48,8 @@ defmodule CatanMapRenderer do
     end)
     |> Enum.min_max
 
-    map_lines = Enum.to_list((min - 4)..(max + 4))
+    Enum.to_list((min - 4)..(max + 4))
     |> Enum.map(fn(_) -> "" end)
-
-    IO.inspect map_lines
-
-    map_lines
   end
 
   defp hex_to_ascii(location = %Location{}, origin = %AsciiOrigin{}) do
