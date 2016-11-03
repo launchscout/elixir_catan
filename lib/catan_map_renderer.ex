@@ -35,8 +35,8 @@ defmodule CatanMapRenderer do
                   _ -> :land
                 end
       map_lines
-      |> EdgeRenderer.render_road(edge, location.d, ascii_location)
-      |> EdgeRenderer.render_harbor(edge, location.d, ascii_location, terrain)
+      |> RoadRenderer.render_road(edge, location.d, ascii_location)
+      |> HarborRenderer.render_harbor(edge, location.d, ascii_location, terrain)
     end)
   end
 

@@ -51,11 +51,11 @@ defmodule CatanMapParser do
       hex_ascii_center = AsciiLocation.qr_to_ascii(location, origin_and_boundaries(map_lines))
 
       edges = hex_ascii_center
-      |> EdgeParser.parse_harbors(map_lines)
+      |> HarborParser.parse_harbors(map_lines)
       |> merge_harbors(location, edges)
 
       hex_ascii_center
-      |> EdgeParser.parse_roads(map_lines)
+      |> RoadParser.parse_roads(map_lines)
       |> merge_roads(location, edges)
     end)
     Map.put_new(board, :edges, edges)

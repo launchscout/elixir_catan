@@ -1,9 +1,8 @@
 defmodule VertexRenderer do
   def render_vertex(map_lines, %{player: player, type: type}, direction, l = %AsciiLocation{}) do
-    map_line = Enum.at(map_lines, l.y)
-               |> StringUtil.replace_substring(vertex_text(player, type), l.x + position(direction, type))
-
-    List.replace_at(map_lines, l.y, map_line)
+    Enum.at(map_lines, l.y)
+    |> StringUtil.replace_substring(vertex_text(player, type), l.x + position(direction, type))
+    |> StringUtil.replace_line(l.y, map_lines)
   end
 
   defp position(:right, :settlement), do: 6

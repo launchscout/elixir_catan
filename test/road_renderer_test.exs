@@ -1,6 +1,6 @@
-defmodule EdgeRendererTest do
+defmodule RoadRendererTest do
   use ExUnit.Case
-  doctest EdgeRenderer
+  doctest RoadRenderer
 
   setup do
     map_lines = ~S"
@@ -21,7 +21,7 @@ defmodule EdgeRendererTest do
     }
   end
 
-  describe "EdgeRenderer.render_road/3" do
+  describe "RoadRenderer.render_road/3" do
     test "renders a sw road", %{map_lines: map_lines, location: location} do
       expected_map = ~S"
         >-----<
@@ -34,7 +34,7 @@ defmodule EdgeRendererTest do
        "
 
       edge = %{player: :red}
-      assert EdgeRenderer.render_road(map_lines, edge, :sw, location) |> Enum.join("\n") == expected_map
+      assert RoadRenderer.render_road(map_lines, edge, :sw, location) |> Enum.join("\n") == expected_map
     end
 
     test "renders a s road", %{map_lines: map_lines, location: location} do
@@ -48,7 +48,7 @@ defmodule EdgeRendererTest do
         >-bbb-<
        "
       edge = %{player: :blue}
-      assert EdgeRenderer.render_road(map_lines, edge, :s, location) |> Enum.join("\n") == expected_map
+      assert RoadRenderer.render_road(map_lines, edge, :s, location) |> Enum.join("\n") == expected_map
     end
 
     test "renders a se road", %{map_lines: map_lines, location: location} do
@@ -63,7 +63,7 @@ defmodule EdgeRendererTest do
        "
 
       edge = %{player: :orange}
-      assert EdgeRenderer.render_road(map_lines, edge, :se, location) |> Enum.join("\n") == expected_map
+      assert RoadRenderer.render_road(map_lines, edge, :se, location) |> Enum.join("\n") == expected_map
     end
   end
 end
