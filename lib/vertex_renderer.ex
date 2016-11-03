@@ -1,5 +1,5 @@
 defmodule VertexRenderer do
-  def render_vertex(%{player: player, type: type}, direction, l = %AsciiLocation{}, map_lines) do
+  def render_vertex(map_lines, %{player: player, type: type}, direction, l = %AsciiLocation{}) do
     map_line = Enum.at(map_lines, l.y)
                |> replace_string(vertex_text(player, type), l.x + position(direction, type))
 

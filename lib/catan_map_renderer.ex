@@ -4,18 +4,37 @@ defmodule CatanMapRenderer do
     y_center = round((length(map_lines) - 1) / 2)
     ascii_origin = %AsciiOrigin{x: 33, y: y_center, width: 70, height: length(map_lines)}
 
-    map_lines = Enum.reduce(board.tiles, map_lines, fn({location, tile}, map_lines) ->
-      ascii_location = hex_to_ascii(location, ascii_origin)
-      HexRenderer.render_tile(tile, ascii_location, map_lines)
-    end)
-
-    map_lines = Enum.reduce(board.vertices, map_lines, fn({location, vertex}, map_lines) ->
-      ascii_location = hex_to_ascii(location, ascii_origin)
-      VertexRenderer.render_vertex(vertex, location.d, ascii_location, map_lines)
-    end)
+    map_lines = map_lines
+    |> render_tiles(board, ascii_origin)
+    |> render_vertices(board, ascii_origin)
+    |> render_edges(board, ascii_origin)
 
     IO.puts Enum.join(map_lines, "\n")
     map_lines |> Enum.join("\n")
+  end
+
+  defp render_tiles(map_lines, board, ascii_origin) do
+    Enum.reduce(board.tiles, map_lines, fn({location, tile}, map_lines) ->
+      ascii_location = hex_to_ascii(location, ascii_origin)
+      map_lines
+      |> HexRenderer.render_tile(tile, ascii_location)
+    end)
+  end
+
+  defp render_vertices(map_lines, board, ascii_origin) do
+    Enum.reduce(board.vertices, map_lines, fn({location, vertex}, map_lines) ->
+      ascii_location = hex_to_ascii(location, ascii_origin)
+      map_lines
+      |> VertexRenderer.render_vertex(vertex, location.d, ascii_location)
+    end)
+  end
+
+  defp render_edges(map_lines, board, ascii_origin) do
+    Enum.reduce(board.edges, map_lines, fn({location, edge}, map_lines) ->
+      ascii_location = hex_to_ascii(location, ascii_origin)
+      map_lines
+      |> EdgeRenderer.render_road(edge, location.d, ascii_location)
+    end)
   end
 
   defp empty_map_lines(board) do

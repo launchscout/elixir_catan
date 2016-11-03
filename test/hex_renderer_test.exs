@@ -35,7 +35,7 @@ defmodule HexRendererTest do
          >-----<"
 
       map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
-      assert HexRenderer.render_tile(tile, location, map_lines) |> Enum.join("\n") == expected_map
+      assert HexRenderer.render_tile(map_lines, tile, location) |> Enum.join("\n") == expected_map
     end
 
     test "renders a water tile" do
@@ -52,7 +52,7 @@ defmodule HexRendererTest do
          >-----<"
 
       map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
-      assert HexRenderer.render_tile(tile, location, map_lines) |> Enum.join("\n") == expected_map
+      assert HexRenderer.render_tile(map_lines, tile, location) |> Enum.join("\n") == expected_map
     end
   end
 end
