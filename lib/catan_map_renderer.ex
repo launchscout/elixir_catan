@@ -32,8 +32,13 @@ defmodule CatanMapRenderer do
   defp render_edges(map_lines, board, ascii_origin) do
     Enum.reduce(board.edges, map_lines, fn({location, edge}, map_lines) ->
       ascii_location = hex_to_ascii(location, ascii_origin)
+      terrain = case board.tiles[%{location | d: nil}] do
+                  %{terrain: :water} -> :water
+                  _ -> :land
+                end
       map_lines
       |> EdgeRenderer.render_road(edge, location.d, ascii_location)
+      |> EdgeRenderer.render_harbor(edge, location.d, ascii_location, terrain)
     end)
   end
 
