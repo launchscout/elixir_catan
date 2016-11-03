@@ -1,4 +1,7 @@
 defmodule HarborParser do
+  # Because it's nicer to put the harbor on the water side,
+  # harbors can be on either side of the edge.
+  # These offsets represent both sides of each edge.
   @harbor_offsets %{se: [{ 4, 1}, { 6, 1}],
                     s:  [{ 0, 2}, { 0, 4}],
                     sw: [{-4, 1}, {-6, 1}]}
