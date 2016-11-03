@@ -6,7 +6,7 @@ defmodule VertexParser do
     line = Enum.at(map_lines, l.y)
 
     Enum.reduce(@vertex_offsets, %{}, fn({direction, offset}, vertices) ->
-      val = String.slice(line, l.x + offset, 2)
+      String.slice(line, l.x + offset, 2)
       |> parse_vertex
       |> add_vertex(direction, vertices)
     end)

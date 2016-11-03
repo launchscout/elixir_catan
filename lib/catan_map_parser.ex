@@ -35,7 +35,7 @@ defmodule CatanMapParser do
       Enum.reduce(range, tiles, fn(r, tiles) ->
         location = %Location{q: q, r: r}
         location
-        |> hex_to_ascii(ascii_origin)
+        |> AsciiLocation.qr_to_ascii(ascii_origin)
         |> HexParser.parse_hex(map_lines)
         |> add_tile(location, tiles)
       end)
@@ -48,7 +48,7 @@ defmodule CatanMapParser do
 
   defp map_edges(board, map_lines) do
     edges = Enum.reduce(board.tiles, %{}, fn({location, _}, edges) ->
-      hex_ascii_center = hex_to_ascii(location, origin_and_boundaries(map_lines))
+      hex_ascii_center = AsciiLocation.qr_to_ascii(location, origin_and_boundaries(map_lines))
 
       edges = hex_ascii_center
       |> EdgeParser.parse_harbors(map_lines)
@@ -83,7 +83,7 @@ defmodule CatanMapParser do
 
   defp map_vertices(board, map_lines) do
     vertices = Enum.reduce(board.tiles, %{}, fn({location, _}, vertices) ->
-      hex_to_ascii(location, origin_and_boundaries(map_lines))
+      AsciiLocation.qr_to_ascii(location, origin_and_boundaries(map_lines))
       |> VertexParser.parse_vertices(map_lines)
       |> merge_vertices(location, vertices)
     end)
@@ -98,16 +98,4 @@ defmodule CatanMapParser do
 
   defp add_vertex(nil, _, board_vertices), do: board_vertices
   defp add_vertex(vertex, location, board_vertices), do: Map.put(board_vertices, location, vertex)
-
-  # Gives the ascii coordinates of the center of the hex at the given point, relative to origin ascii coordinate
-  defp hex_to_ascii(location = %Location{}, origin = %AsciiOrigin{}) do
-    x = round(9 * location.q) + origin.x
-    y = round(6 * (location.r + location.q / 2)) + origin.y
-
-    cond do
-      x - 6 < 0 || x + 6 >= origin.width -> nil
-      y - 3 < 0 || y + 3 >= origin.height -> nil
-      true -> %AsciiLocation{x: x, y: y}
-    end
-  end
 end

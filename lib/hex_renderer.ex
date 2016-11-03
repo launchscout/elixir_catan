@@ -10,7 +10,7 @@ defmodule HexRenderer do
 
   defp render_resource(map_lines, tile, l = %AsciiLocation{}) do
     _render_resource(tile, l.x, Enum.at(map_lines, l.y))
-    |> replace_line(l.y, map_lines)
+    |> StringUtil.replace_line(l.y, map_lines)
   end
 
   defp _render_resource(%{resource: nil, terrain: nil}, _, map_line), do: map_line
@@ -20,7 +20,7 @@ defmodule HexRenderer do
 
   defp render_chit(map_lines, tile, l = %AsciiLocation{}) do
     _render_chit(tile, l.x, Enum.at(map_lines, l.y - 1))
-    |> replace_line(l.y - 1, map_lines)
+    |> StringUtil.replace_line(l.y - 1, map_lines)
   end
 
   defp _render_chit(%{chit: nil}, _, map_line), do: map_line
@@ -28,7 +28,7 @@ defmodule HexRenderer do
 
   defp render_robber(map_lines, tile, l = %AsciiLocation{}) do
     _render_robber(tile, l.x, Enum.at(map_lines, l.y + 1))
-    |> replace_line(l.y + 1, map_lines)
+    |> StringUtil.replace_line(l.y + 1, map_lines)
   end
 
   defp _render_robber(%{robber: false}, _, map_line), do: map_line
@@ -36,7 +36,7 @@ defmodule HexRenderer do
 
   defp render_centered(title, x, map_line) do
     start_position = x - trunc(String.length(title) / 2)
-    replace_string(map_line, title, start_position)
+    StringUtil.replace_substring(map_line, title, start_position)
   end
 
   @water_template [~S{>-----<},
@@ -52,7 +52,7 @@ defmodule HexRenderer do
       y = l.y + index - 3
       x = l.x + round((String.length(template_line) - 1) / -2)
       map_line = Enum.at(map_lines, y)
-                 |> replace_string(template_line, x)
+                 |> StringUtil.replace_substring(template_line, x)
 
       List.replace_at(map_lines, y, map_line)
     end)
@@ -71,20 +71,9 @@ defmodule HexRenderer do
       y = l.y + index - 3
       x = l.x + round((String.length(template_line) - 1) / -2)
       map_line = Enum.at(map_lines, y)
-      |> replace_string(template_line, x)
+      |> StringUtil.replace_substring(template_line, x)
 
       List.replace_at(map_lines, y, map_line)
     end)
-  end
-
-  defp replace_line(map_line, position, map_lines) do
-    List.replace_at(map_lines, position, map_line)
-  end
-
-  defp replace_string(dest, replacement, position) do
-    dest = String.pad_trailing(dest, String.length(replacement) + position)
-    String.slice(dest, 0, position)
-    <> replacement
-    <> String.slice(dest, position + String.length(replacement), String.length(dest) - 1)
   end
 end

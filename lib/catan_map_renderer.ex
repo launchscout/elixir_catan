@@ -13,7 +13,7 @@ defmodule CatanMapRenderer do
 
   defp render_tiles(map_lines, board, ascii_origin) do
     Enum.reduce(board.tiles, map_lines, fn({location, tile}, map_lines) ->
-      ascii_location = hex_to_ascii(location, ascii_origin)
+      ascii_location = AsciiLocation.qr_to_ascii(location, ascii_origin)
       map_lines
       |> HexRenderer.render_tile(tile, ascii_location)
     end)
@@ -21,7 +21,7 @@ defmodule CatanMapRenderer do
 
   defp render_vertices(map_lines, board, ascii_origin) do
     Enum.reduce(board.vertices, map_lines, fn({location, vertex}, map_lines) ->
-      ascii_location = hex_to_ascii(location, ascii_origin)
+      ascii_location = AsciiLocation.qr_to_ascii(location, ascii_origin)
       map_lines
       |> VertexRenderer.render_vertex(vertex, location.d, ascii_location)
     end)
@@ -29,7 +29,7 @@ defmodule CatanMapRenderer do
 
   defp render_edges(map_lines, board, ascii_origin) do
     Enum.reduce(board.edges, map_lines, fn({location, edge}, map_lines) ->
-      ascii_location = hex_to_ascii(location, ascii_origin)
+      ascii_location = AsciiLocation.qr_to_ascii(location, ascii_origin)
       terrain = case board.tiles[%{location | d: nil}] do
                   %{terrain: :water} -> :water
                   _ -> :land
@@ -44,22 +44,11 @@ defmodule CatanMapRenderer do
     origin = %AsciiOrigin{x: 500, y: 500, width: 1000, height: 1000}
 
     {min, max} = Enum.map(board.tiles, fn({location, _}) ->
-      500 - hex_to_ascii(location, origin).y
+      500 - AsciiLocation.qr_to_ascii(location, origin).y
     end)
     |> Enum.min_max
 
     Enum.to_list((min - 4)..(max + 4))
     |> Enum.map(fn(_) -> "" end)
-  end
-
-  defp hex_to_ascii(location = %Location{}, origin = %AsciiOrigin{}) do
-    x = round(9 * location.q) + origin.x
-    y = round(6 * (location.r + location.q / 2)) + origin.y
-
-    cond do
-      x - 6 < 0 || x + 6 >= origin.width -> nil
-      y - 3 < 0 || y + 3 >= origin.height -> nil
-      true -> %AsciiLocation{x: x, y: y}
-    end
   end
 end
