@@ -120,4 +120,8 @@ defmodule StandardRenderingTest do
 
     assert CatanMapRenderer.render(board) == expected_map
   end
+
+  test "it produces something parseable", %{board: board} do
+    assert CatanMapRenderer.render(board) |> CatanMapParser.parse == board
+  end
 end
