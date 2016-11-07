@@ -32,7 +32,7 @@ defmodule HexParser do
   end
 
   defp contains_robber?(map_lines, location = %AsciiLocation{}) do
-    Enum.at(map_lines, location.y + 1) |> String.at(location.x) == "B"
+    Enum.at(map_lines, location.y - 1) |> String.at(location.x + 1) == "R"
   end
 
   defp parse_chit(map_lines, location = %AsciiLocation{}) do

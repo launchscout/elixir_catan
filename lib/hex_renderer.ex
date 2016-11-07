@@ -27,12 +27,12 @@ defmodule HexRenderer do
   defp _render_chit(%{chit: chit}, x, map_line), do: Integer.to_string(chit) |> render_centered(x, map_line)
 
   defp render_robber(map_lines, tile, l = %AsciiLocation{}) do
-    _render_robber(tile, l.x, Enum.at(map_lines, l.y + 1))
-    |> StringUtil.replace_line(l.y + 1, map_lines)
+    _render_robber(tile, l.x + 1, Enum.at(map_lines, l.y - 1))
+    |> StringUtil.replace_line(l.y - 1, map_lines)
   end
 
   defp _render_robber(%{robber: false}, _, map_line), do: map_line
-  defp _render_robber(%{robber: true}, x, map_line), do: render_centered("ROBBER", x, map_line)
+  defp _render_robber(%{robber: true}, x, map_line), do: render_centered("R", x, map_line)
 
   defp render_centered(title, x, map_line) do
     start_position = x - trunc(String.length(title) / 2)

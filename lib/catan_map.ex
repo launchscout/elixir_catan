@@ -21,7 +21,7 @@ defmodule CatanMap do
   end
 
   def robber_location(%{tiles: tiles}) do
-    Enum.find(tiles, nil, fn({location, tile}) ->
+    Enum.find_value(tiles, nil, fn({location, tile}) ->
       case tile[:robber] do
         false -> false
         true -> location

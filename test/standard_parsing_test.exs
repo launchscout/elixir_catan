@@ -21,9 +21,9 @@ defmodule StandardParsingTest do
   \~~~~~~~/    3    \       /    9    \       /    9    \~~~~~~~/
    >-----<   grain   >-----<  lumber   >-----<    ore    >-----<
   /~~~~~~~\         /       \         /       \         /~~~~~~~\
- /~~~~~~~~~\       /    8    \       /         \       /~~~~~~~~~\
+ /~~~~~~~~~\       /    8    \       /     R   \       /~~~~~~~~~\
 <~~~~~~~~~~~>-----<   wool    >-----<  desert   >-----<~~~~~~~~~~~>
- \~~~~~~~~b/       \         /       \ ROBBER  /       \o~~~~~~~~/
+ \~~~~~~~~b/       \         /       \         /       \o~~~~~~~~/
   \~~~~~~b/   10    \       /    6    \       /   10    \o~~~~~~/
    >-----<  lumber   >-----<   brick   >-----<   wool    >-----<
   /~~~~~~~\         /       \         /       \         /~~~~~~~\
@@ -72,7 +72,7 @@ defmodule StandardParsingTest do
 
   test "parses robber correctly", %{map: map} do
     _robber_location = CatanMapParser.parse(map) |> CatanMap.robber_location
-    assert _robber_location = %{q: 1, r: -1}
+    assert _robber_location == %Location{q: 1, r: -1}
   end
 
   test "detects water hexes correctly", %{map: map} do
