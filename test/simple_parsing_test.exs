@@ -29,7 +29,6 @@ defmodule SimpleParsingTest do
 
   test "parses correct tile count on a simple map", %{map: map} do
     assert CatanMapParser.parse(map) |> CatanMap.terrain_count == 1
-
   end
 
   test "assigns correct terrain on a simple map", %{map: map} do
