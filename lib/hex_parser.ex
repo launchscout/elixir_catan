@@ -11,24 +11,30 @@ defmodule HexParser do
 
   def parse_hex(nil, _), do: nil
   def parse_hex(location = %AsciiLocation{}, map_lines) do
-    water = String.at(Enum.at(map_lines, location.y + 1), location.x)
+    water = String.at(Enum.at(map_lines, location.y - 1), location.x)
     resource = String.at(Enum.at(map_lines, location.y), location.x)
-    cond do
-      water == "~" ->
-        %{
-          resource: nil,
-          terrain: :water,
-          chit: nil,
-          robber: false
-        }
-      true ->
-        %{
-          resource: @resource_map[resource],
-          terrain: @terrain_map[resource],
-          chit: parse_chit(map_lines, location),
-          robber: contains_robber?(map_lines, location)
-        }
-    end
+    name = parse_name(map_lines, location)
+    build_tile(map_lines, location, water, resource, name)
+  end
+
+  defp build_tile(_, _, "~", _, name) do
+    %{
+      resource: nil,
+      terrain: :water,
+      chit: nil,
+      robber: false,
+      name: name
+    }
+  end
+
+  defp build_tile(map_lines, location = %AsciiLocation{}, _, resource, name) do
+    %{
+      resource: @resource_map[resource],
+      terrain: @terrain_map[resource],
+      chit: parse_chit(map_lines, location),
+      robber: contains_robber?(map_lines, location),
+      name: name
+    }
   end
 
   defp contains_robber?(map_lines, location = %AsciiLocation{}) do
@@ -45,4 +51,15 @@ defmodule HexParser do
 
   defp chit_value({value, _}), do: value
   defp chit_value(:error), do: nil
+
+  defp parse_name(map_lines, location = %AsciiLocation{}) do
+    Enum.at(map_lines, location.y + 1)
+    |> String.slice(location.x - 3, 7)
+    |> String.trim
+    |> String.trim("~")
+    |> normalize_name
+  end
+
+  defp normalize_name(""), do: nil
+  defp normalize_name(name), do: name
 end

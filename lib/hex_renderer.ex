@@ -1,11 +1,12 @@
 defmodule HexRenderer do
-  def render_tile(map_lines, %{resource: nil, terrain: nil}, _), do: map_lines
+  def render_tile(map_lines, %{resource: nil, terrain: nil, name: nil}, _), do: map_lines
   def render_tile(map_lines, tile, l = %AsciiLocation{}) do
     map_lines
     |> render_template(tile, l)
     |> render_resource(tile, l)
     |> render_chit(tile, l)
     |> render_robber(tile, l)
+    |> render_name(tile, l)
   end
 
   defp render_resource(map_lines, tile, l = %AsciiLocation{}) do
@@ -33,6 +34,17 @@ defmodule HexRenderer do
 
   defp _render_robber(%{robber: false}, _, map_line), do: map_line
   defp _render_robber(%{robber: true}, x, map_line), do: render_centered("R", x, map_line)
+
+  defp render_name(map_lines, tile, l = %AsciiLocation{}) do
+    _render_name(tile, l.x-2, Enum.at(map_lines, l.y + 1))
+    |> StringUtil.replace_line(l.y + 1, map_lines)
+  end
+
+  defp _render_name(%{name: nil}, _, map_line), do: map_line
+  defp _render_name(%{name: name}, x, map_line) do
+    str = String.pad_leading(name, 5, " ")
+    StringUtil.replace_substring(map_line, str, x)
+  end
 
   defp render_centered(title, x, map_line) do
     start_position = x - trunc(String.length(title) / 2)

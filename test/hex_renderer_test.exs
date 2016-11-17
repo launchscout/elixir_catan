@@ -23,7 +23,7 @@ defmodule HexRendererTest do
   describe "HexRenderer.render_tile/3" do
     test "renders a normal tile" do
       location = %AsciiLocation{x: 12, y: 4}
-      tile = %{chit: nil, resource: :brick, robber: false, terrain: :hills}
+      tile = %{chit: nil, resource: :brick, robber: false, terrain: :hills, name: nil}
 
       expected_map = ~S"
          >-----<
@@ -40,7 +40,7 @@ defmodule HexRendererTest do
 
     test "renders a water tile" do
       location = %AsciiLocation{x: 12, y: 4}
-      tile = %{chit: nil, resource: nil, robber: false, terrain: :water}
+      tile = %{chit: nil, resource: nil, robber: false, terrain: :water, name: nil}
 
       expected_map = ~S"
          >-----<
@@ -49,6 +49,23 @@ defmodule HexRendererTest do
       <~~~~~~~~~~~>
        \~~~~~~~~~/
         \~~~~~~~/
+         >-----<"
+
+      map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
+      assert HexRenderer.render_tile(map_lines, tile, location) |> Enum.join("\n") == expected_map
+    end
+
+    test "renders a named tile" do
+      location = %AsciiLocation{x: 12, y: 4}
+      tile = %{chit: nil, resource: :brick, robber: false, terrain: :hills, name: "HOME"}
+
+      expected_map = ~S"
+         >-----<
+        /       \
+       /         \
+      <   brick   >
+       \   HOME  /
+        \       /
          >-----<"
 
       map_lines = Enum.to_list(0..7) |> Enum.map(fn(_) -> "" end)
